@@ -1,49 +1,79 @@
 import React, { useEffect, useState } from 'react';
 import Cart from '../Cart/Cart';
 import Product from '../Product/Product';
+import { addToDb, getStoredCart } from '../../utilities/fakedb';
 import './Shop.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 
 const Shop = () => {
     const [products, setProducts] = useState([]);
-    const [searchProducts, setSearchProducts] = useState([]);
-
-    const handleSearch = event => {
-        const searchProducts = products.filter(product => product.name.toLowerCase().includes(event.target.value.toLowerCase()));
-        setSearchProducts(searchProducts);
-    };
-
+    const [cart, setCart] = useState([]);
+    // products to be rendered on the UI
+    const [displayProducts, setDisplayProducts] = useState([]);
 
     useEffect(() => {
-        fetch("./products.JSON")
-            .then(response => response.json())
+        fetch('./products.JSON')
+            .then(res => res.json())
             .then(data => {
                 setProducts(data);
-                setSearchProducts(data);
-            })
-            .catch(error => console.log(error));
+                setDisplayProducts(data);
+            });
     }, []);
 
+    useEffect(() => {
+        if (products.length) {
+            const savedCart = getStoredCart();
+            const storedCart = [];
+            for (const key in savedCart) {
+                const addedProduct = products.find(product => product.key === key);
+                if (addedProduct) {
+                    const quantity = savedCart[key];
+                    addedProduct.quantity = quantity;
+                    storedCart.push(addedProduct);
+                }
+            }
+            setCart(storedCart);
+        }
+    }, [products])
+
+    const handleAddToCart = (product) => {
+        const newCart = [...cart, product];
+        setCart(newCart);
+        // save to local storage (for now)
+        addToDb(product.key);
+    }
+
+    const handleSearch = event => {
+        const searchText = event.target.value;
+
+        const matchedProducts = products.filter(product => product.name.toLowerCase().includes(searchText.toLowerCase()));
+
+        setDisplayProducts(matchedProducts);
+    }
+
     return (
-        <div>
+        <>
             <div className="search-container">
-                <input onChange={handleSearch} type="text" placeholder="type here to search" />
-                <FontAwesomeIcon icon={faShoppingCart} className="cart-icon" />
-                <span>0</span>
+                <input
+                    type="text"
+                    onChange={handleSearch}
+                    placeholder="Search Product" />
             </div>
-            <div className="shop">
-                <div className="products">
+            <div className="shop-container">
+                <div className="product-container">
                     {
-                        searchProducts.map(product => <Product key={product.key} product={product}></Product>)
+                        displayProducts.map(product => <Product
+                            key={product.key}
+                            product={product}
+                            handleAddToCart={handleAddToCart}
+                        >
+                        </Product>)
                     }
                 </div>
-
-                <div className="cart">
-                    <Cart></Cart>
+                <div className="cart-container">
+                    <Cart cart={cart}></Cart>
                 </div>
             </div>
-        </div>
+        </>
     );
 };
 

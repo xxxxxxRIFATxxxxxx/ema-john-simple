@@ -1,25 +1,20 @@
-.header {
+.header{
     text-align: center;
 }
-
-.header img {
-    width: 22%;
+.logo{
+    height: 50px;
 }
-
 .header nav {
     background-color: black;
-    padding: 10px;
-    margin-top: 20px;
+    line-height: 40px;
 }
-
-.header nav a {
-    color: white;
+.header nav a{
     text-decoration: none;
-    padding: 10px;
-    margin-right: 10px;
+    color: white;
+    margin-right: 20px;
+    padding: 5px;
+    font-size: 20px;
 }
-
-.header nav a:hover {
+.header nav a:hover{
     background-color: lightgray;
 }
-

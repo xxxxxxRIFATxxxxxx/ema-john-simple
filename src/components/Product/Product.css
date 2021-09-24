@@ -1,27 +1,21 @@
-.product {
+.product{
     display: flex;
-    justify-content: center;
-    align-items: center;
     border-bottom: 1px solid lightgray;
-    padding: 5px 20px 30px 20px;
+    margin-right: 5px;
+    padding-bottom: 5px;
 }
-
-.product .product-image {
-    margin-right: 30px;
+.product-name{
+    color: blue;
+    font-weight: 400;
 }
-
-.product button {
-    background-color: #F0C14B;
-    border: 1px solid black;
-    padding: 5px 50px;
+.btn-regular{
+    background-color: goldenrod;
+    width: 150px;
+    height: 25px;
+    border: 1px solid gray;
     border-radius: 5px;
     cursor: pointer;
 }
-
-.product .blue-text {
-    color: blue;
-}
-
-.product .star-icon {
-    color: orange;
+.icon-color{
+    color: gold;
 }
